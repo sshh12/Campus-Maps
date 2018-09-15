@@ -57,6 +57,7 @@ class App extends Component {
   }
 
   // invoked immediately after component is mounted (inserted into the tree) 
+  // SHRIVE_TODO: fetch db stuff
   componentDidMount() {
     const coordinates = [];
     const events = this.getEvents();
