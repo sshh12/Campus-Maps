@@ -67,15 +67,16 @@ class App extends Component {
 
       for (let i = 0; i < events.length; i++) {
         const event = events[i];
+        let desc = "where: "+ event.location+"<br>start: "+this.convertUnixTime(event.startTime)+"<br>end: "+this.convertUnixTime(event.endTime)
         coordinates.push({
-            "location": [29.718037, -95.402340],
+            "location": [event.latitude, event.longitude],
             "addHandler": "mouseover",
-            "infoboxOption": {title: event.title},
+            "infoboxOption": {title: event.title, description: desc},
             "pushPinOption":{ title: event.title, description: 'Pushpin' },
             "infoboxAddHandler": {"type" : "click", callback: () => {} },
             "pushPinAddHandler": {"type" : "click", callback: () => {} },
           });
-        eventElems.push(<Event coordinates={[29.718037, -95.402340]} name = {event.title} time = "12:00" />)
+        eventElems.push(<Event coordinates={[event.latitude, event.longitude]} name = {event.title} time = {this.convertUnixTime(event.startTime)} />)
       }
 
       this.setState( {
@@ -97,6 +98,11 @@ class App extends Component {
 
   searchEvents() {
 
+  }
+
+  convertUnixTime(time) {
+    let date = new Date(time)
+    return date.toLocaleTimeString()
   }
 
   render() {

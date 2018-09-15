@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
   window.backend = {}
+  backend.user = null
   backend.db = firebase.database()
   backend.eventList = backend.db.ref('events')
   backend.googleProvider = new firebase.auth.GoogleAuthProvider()
