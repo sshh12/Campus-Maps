@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
   window.backend = {}
+  backend.user = null
   backend.db = firebase.database()
   backend.eventList = backend.db.ref('events')
   backend.googleProvider = new firebase.auth.GoogleAuthProvider()
@@ -45,6 +46,7 @@ function logIn(callback) {
         interestedEvents: {},
         attendingEvents: {}
     })
+    callback(backend.user)
 
    }).catch(function(error) {
     var errorCode = error.code
@@ -52,7 +54,6 @@ function logIn(callback) {
     var email = error.email
     var credential = error.credential
   })
-  callback(backend.user)
 }
 
 function updateEventInterest(eventId, userId) {

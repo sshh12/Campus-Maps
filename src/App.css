@@ -1,7 +1,5 @@
 .App {
   text-align: center;
-  height: 100vh;
-  width: 100vw;
 }
 
 .App-logo {
@@ -26,10 +24,6 @@
 
 .panel * div {
   padding-top: 10px;
-}
-
-.row {
-  height: 100vh;
 }
 
 .align-left {

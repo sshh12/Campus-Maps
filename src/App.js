@@ -17,7 +17,10 @@ class Event extends Component {
   }
 
   onClickEvent() {
-    alert("Hello! I am an Angera");
+    console.log("Begin");
+
+    console.log("End");
+    //window.createEvent("hhji", "hjhjhe", 67,667);
   }
 
   render() {
@@ -42,6 +45,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      user: null,
       bingmapKey: "AlZR2yc0TK1RQDUNBOIxxYR0ShV4EZcsq10Y2TF3LNDHSnuHt4pw8rXAxBaZpeu2",
       pushPins: []
       /*pushPins : [
@@ -107,6 +111,23 @@ class App extends Component {
 
   }
 
+  onLogIn(user) {
+    console.log(user);
+
+  }
+
+  onClickMyEvents() {
+    if (window.backend.user == null)
+    {
+      window.logIn(console.log);
+    }
+
+    else {
+
+    }
+
+  }
+
   render() {
     if (!this.state.isLoaded) {
       return (
@@ -116,14 +137,10 @@ class App extends Component {
                 <div className = "col-4 panel" >
                   <div className="search-header">
                     <div className = "block">
-                      <form>
-                        <input type="text" placeholder="Angera Search..."/>
-                        <Button color="primary" onClick={() => this.searchEvents()} >Search</Button>{' '}
-                      </form>
                     </div>
                     <div className = "menu">
                       <Button color="primary">All Events</Button>{' '}
-                      <Button color="success">My Events</Button>{' '}
+                      <Button color="success" onClick = {() => this.onClickMyEvents()}>My Events</Button>{' '}
                     </div>
                   </div>
                   {this.getCurrentEvents()}
@@ -137,19 +154,22 @@ class App extends Component {
     } else {
       return (
         <div className="App">
+          <nav className="navbar navbar-default navbar-fixed-top">
+           <div className="container">
+              <h3>Campus Maps</h3>
+               {!(window.backend.user === null) && <Button className = "navbar-right" color="primary" onClick={() => window.logIn(console.log)} >Log In</Button>}
+               {window.backend.user !== null && <h4 className = "navbar-right"> {window.backend.user.email}</h4> }
+            </div>
+          </nav>
          <div className = "container-fluid">
               <div className = "row">
                 <div className = "col-4 panel" >
                   <div className="search-header">
                     <div className = "block">
-                      <form>
-                        <input type="text" placeholder="Angera Search..."/>
-                        <Button color="primary" onClick={() => this.searchEvents()} >Search</Button>{' '}
-                      </form>
                     </div>
                     <div className = "menu">
                       <Button color="primary">All Events</Button>{' '}
-                      <Button color="success">My Events</Button>{' '}
+                      <Button color="success" onClick = {() => this.onClickMyEvents()}>My Events</Button>
                     </div>
                   </div>
                   {this.getCurrentEvents()}
