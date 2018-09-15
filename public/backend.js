@@ -1,17 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-  // // The Firebase SDK is initialized and available here!
-  //
-  // firebase.auth().onAuthStateChanged(user => { });
-  // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-  // firebase.messaging().requestPermission().then(() => { });
-  // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-  //
-  // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-  window.db = firebase.database()
-  window.eventList = db.ref('events')
-  window.googleProvider = new firebase.auth.GoogleAuthProvider()
-  
+  window.backend = {}
+  bakckend.db = firebase.database()
+  backend.eventList = db.ref('events')
+  backend.window.googleProvider = new firebase.auth.GoogleAuthProvider()
 })
 
 function createEvent(title, loc, startTime, endTime) {
@@ -113,4 +104,3 @@ function updateNotEventAttending(eventId, userId) {
 
   db.ref(`users/${userId}/attendingEvents/${eventId}`).remove()
 }
-
