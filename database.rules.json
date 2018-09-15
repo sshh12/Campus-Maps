@@ -1,60 +1,38 @@
 {
-  "rules": {
-    "users": {
-      "$uid": {
-        ".read": "$uid === auth.uid",
-        ".write": "$uid === auth.uid"
-      }
-    },
-    "events": {
-      ".read": true,
-      ".write": "auth != null && !data.exists()",
-      ".validate": "newData.hasChildren(['title', 'location', 'startTime', 'endTime'])"
+    "rules": {
+        "users": {
+            "$uid": {
+                ".read": "$uid === auth.uid",
+                ".write": "$uid === auth.uid",
+                ".validate": "newData.hasChildren(['email', 'name'])"
+            }
+        },
+        "events": {
+            ".read": true,
+            "$eventID": {
+                ".write": "auth != null",
+                ".validate": "newData.hasChild('attendingUsers') || newData.hasChildren(['title', 'creator', 'location', 'startTime', 'endTime'])",
+                "title": {
+                    ".write": "newData.child('creator').val() === auth.uid",
+                    ".validate": "newData.isString() && newData.val().length > 1"
+                },
+                "location": {
+                    ".write": "newData.child('creator').val() === auth.uid",
+                    ".validate": "newData.isString() && newData.val().length > 2"
+                },
+                "startTime": {
+                    ".write": "newData.child('creator').val() === auth.uid",
+                    ".validate": "newData.isNumber()"
+                },
+                "endTime": {
+                    ".write": "newData.child('creator').val() === auth.uid",
+                    ".validate": "newData.isNumber()"
+                },
+                "attendingUsers": {
+                    ".write": true,
+                    ".validate": "!newData.exists() || (newData.val() === data.val() + 1 && !root.child('users').child(auth.uid).child('attendingEvents').child($eventID).exists()) || (newData.val() === data.val() - 1 && root.child('users').child(auth.uid).child('attendingEvents').child($eventID).exists())"
+				}
+            }
+        }
     }
-  }
-}{
-  "rules": {
-    "users": {
-      "$uid": {
-        ".read": "$uid === auth.uid",
-        ".write": "$uid === auth.uid"
-      }
-    },
-    "events": {
-      ".read": true,
-      "$eventID": {
-        ".write": "auth != null && newData.child('creator').val() === auth.uid",
-     	  ".validate": "newData.hasChildren(['title', 'creator', 'location', 'startTime', 'endTime'])",
-        "title": {
-          ".validate": "newData.isString() && newData.val().length > 1"
-        },
-        "location": {{
-  "rules": {
-    "users": {
-      "$uid": {
-        ".read": "$uid === auth.uid",
-        ".write": "$uid === auth.uid",
-    		".validate": "newData.hasChildren(['email', 'name'])"
-      }
-    },
-    "events": {
-      ".read": true,
-      "$eventID": {
-        ".write": "auth != null && newData.child('creator').val() === auth.uid",
-     	  ".validate": "newData.hasChildren(['title', 'creator', 'location', 'startTime', 'endTime'])",
-        "title": {
-          ".validate": "newData.isString() && newData.val().length > 1"
-        },
-        "location": {
-          ".validate": "newData.isString() && newData.val().length > 2"
-        },
-        "startTime": {
-          ".validate": "newData.isNumber()"
-        },
-        "endTime": {
-          ".validate": "newData.isNumber()"
-        } 
-      }
-    }
-  }
 }

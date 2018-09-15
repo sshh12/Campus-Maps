@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
   window.db = firebase.database()
   window.eventList = db.ref('events')
   window.googleProvider = new firebase.auth.GoogleAuthProvider()
+  
 })
 
 function createEvent(title, loc, startTime, endTime) {
