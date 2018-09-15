@@ -7,13 +7,15 @@ document.addEventListener('DOMContentLoaded', function() {
   readyForStuff();
 })
 
-function createEvent(title, loc, startTime, endTime) {
+function createEvent(title, loc, startTime, endTime, lat, long) {
   let newEvent = backend.eventList.push()
   newEvent.set({
       title: title,
       location: loc,
       startTime: startTime,
       endTime: endTime,
+      latitude: lat,
+      longitude: long,
       interestedUsers: 0,
       attendingUsers: 0,
       creator: backend.user.uid
@@ -45,14 +47,13 @@ function logIn(callback) {
         interestedEvents: {},
         attendingEvents: {}
     })
-
+    callback(backend.user)
    }).catch(function(error) {
     var errorCode = error.code
     var errorMessage = error.message
     var email = error.email
     var credential = error.credential
   })
-  callback(backend.user)
 }
 
 function updateEventInterest(eventId, userId) {

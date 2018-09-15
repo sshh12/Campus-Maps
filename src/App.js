@@ -44,14 +44,6 @@ class App extends Component {
     this.state = {
       bingmapKey: "AlZR2yc0TK1RQDUNBOIxxYR0ShV4EZcsq10Y2TF3LNDHSnuHt4pw8rXAxBaZpeu2",
       pushPins: []
-      /*pushPins : [
-        {
-          "location":[29.718037, -95.402340], "option":{ color: 'purple' }, "addHandler": {"type" : "click", callback: this.callBackMethod }
-        },
-        {
-          "location":[29.718191, -95.400085], "option":{ color: 'green' }, "addHandler": {"type" : "click", callback: this.callBackMethod }
-        }
-      ]*/
     }
   }
 
