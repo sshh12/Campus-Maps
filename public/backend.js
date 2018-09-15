@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
   window.backend = {}
-  bakckend.db = firebase.database()
-  backend.eventList = db.ref('events')
-  backend.window.googleProvider = new firebase.auth.GoogleAuthProvider()
+  backend.db = firebase.database()
+  backend.eventList = backend.db.ref('events')
+  backend.googleProvider = new firebase.auth.GoogleAuthProvider()
 })
 
 function createEvent(title, loc, startTime, endTime) {
-  let newEvent = eventList.push()
+  let newEvent = backend.eventList.push()
   newEvent.set({
       title: title,
       location: loc,
@@ -18,25 +18,28 @@ function createEvent(title, loc, startTime, endTime) {
   })
 }
 
-function getEvents() {
-  eventList.once('value', function(snapshot) {
+function getEvents(callback) {
+  backend.eventList.once('value', function(snapshot) {
+    let events = []
     snapshot.forEach(function(childSnapshot) {
       var childKey = childSnapshot.key;
       var childData = childSnapshot.val()
-      console.log(childKey, childData)
+      childData.key = childKey
+      events.push(childData)
     });
+    callback(events)
   });
 }
 
-function logIn() {
-  firebase.auth().signInWithPopup(googleProvider).then(function(result) {
+function logIn(callback) {
+  firebase.auth().signInWithPopup(backend.googleProvider).then(function(result) {
     var token = result.credential.accessToken
     var user = result.user
 
-    window.user = user
-    db.ref(`users/${user.uid}`).update({
-        name: user.displayName,
-        email: user.email.toLowerCase(),
+    backend.user = user
+    backend.db.ref(`users/${user.uid}`).update({
+        name: backend.user.displayName,
+        email: backend.user.email.toLowerCase(),
         interestedEvents: {},
         attendingEvents: {}
     })
@@ -47,11 +50,12 @@ function logIn() {
     var email = error.email
     var credential = error.credential
   })
+  callback(backend.user)
 }
 
 function updateEventInterest(eventId, userId) {
-  let event = db.ref(`events/${eventId}`)
-  let userIntEvents = db.ref(`users/${userId}/interestedEvents`)
+  let event = backend.db.ref(`events/${eventId}`)
+  let userIntEvents = backend.db.ref(`users/${userId}/interestedEvents`)
   event.transaction(function(event) {
     if (event) {
       event.interestedUsers++
@@ -65,8 +69,8 @@ function updateEventInterest(eventId, userId) {
 }
 
 function updateNotEventInterest(eventId, userId) {
-  let event = db.ref(`events/${eventId}`)
-  let userIntEvents = db.ref(`users/${userId}/interestedEvents`)
+  let event = backend.db.ref(`events/${eventId}`)
+  let userIntEvents = backend.db.ref(`users/${userId}/interestedEvents`)
   event.transaction(function(event) {
     if (event) {
       event.interestedUsers--
@@ -74,12 +78,12 @@ function updateNotEventInterest(eventId, userId) {
     return event
   })
 
-  db.ref(`users/${userId}/interestedEvents/${eventId}`).remove()
+  backend.db.ref(`users/${userId}/interestedEvents/${eventId}`).remove()
 }
 
 function updateEventAttending(eventId, userId) {
-  let event = db.ref(`events/${eventId}`)
-  let userIntEvents = db.ref(`users/${userId}/attendingEvents`)
+  let event = backend.db.ref(`events/${eventId}`)
+  let userIntEvents = backend.db.ref(`users/${userId}/attendingEvents`)
   event.transaction(function(event) {
     if (event) {
       event.attendingUsers++
@@ -93,8 +97,8 @@ function updateEventAttending(eventId, userId) {
 }
 
 function updateNotEventAttending(eventId, userId) {
-  let event = db.ref(`events/${eventId}`)
-  let userIntEvents = db.ref(`users/${userId}/attendingEvents`)
+  let event = backend.db.ref(`events/${eventId}`)
+  let userIntEvents = backend.db.ref(`users/${userId}/attendingEvents`)
   event.transaction(function(event) {
     if (event) {
       event.attendingUsers--
@@ -102,5 +106,5 @@ function updateNotEventAttending(eventId, userId) {
     return event
   })
 
-  db.ref(`users/${userId}/attendingEvents/${eventId}`).remove()
+  backend.db.ref(`users/${userId}/attendingEvents/${eventId}`).remove()
 }
