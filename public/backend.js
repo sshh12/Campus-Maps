@@ -8,15 +8,29 @@ document.addEventListener('DOMContentLoaded', function() {
   // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
   //
   // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-
-  try {
-    let app = firebase.app();
-    let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
-    document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
-  } catch (e) {
-    console.error(e);
-    document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
-  }
+  window.db = firebase.database();
+  window.eventList = db.ref('events')
+  createEvent("test2", "RMC", new Date().getTime(), new Date().getTime() + 50000)
+  getEvents()
 });
 
-console.log('Noushini w/ Shrivini')
+function createEvent(title, loc, startTime, endTime) {
+  let newEvent = eventList.push()
+  newEvent.set({
+      title: title,
+      location: loc,
+      startTime: startTime,
+      endTime: endTime
+    })
+}
+
+function getEvents() {
+  eventList.once('value', function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+      var childKey = childSnapshot.key;
+      var childData = childSnapshot.val();
+      console.log(childKey, childData)
+    });
+  });
+}
+
