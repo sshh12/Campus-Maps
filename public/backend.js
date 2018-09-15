@@ -1,14 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
   window.backend = {}
-<<<<<<< HEAD
-  bakckend.db = firebase.database()
-  backend.eventList = db.ref('events')
-  backend.window.googleProvider = new firebase.auth.GoogleAuthProvider()
-=======
   backend.db = firebase.database()
   backend.eventList = backend.db.ref('events')
   backend.googleProvider = new firebase.auth.GoogleAuthProvider()
->>>>>>> master
 })
 
 function createEvent(title, loc, startTime, endTime) {
