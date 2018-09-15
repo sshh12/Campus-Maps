@@ -28,6 +28,23 @@
         "title": {
           ".validate": "newData.isString() && newData.val().length > 1"
         },
+        "location": {{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid",
+    		".validate": "newData.hasChildren(['email', 'name'])"
+      }
+    },
+    "events": {
+      ".read": true,
+      "$eventID": {
+        ".write": "auth != null && newData.child('creator').val() === auth.uid",
+     	  ".validate": "newData.hasChildren(['title', 'creator', 'location', 'startTime', 'endTime'])",
+        "title": {
+          ".validate": "newData.isString() && newData.val().length > 1"
+        },
         "location": {
           ".validate": "newData.isString() && newData.val().length > 2"
         },
