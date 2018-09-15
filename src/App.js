@@ -3,17 +3,16 @@ import logo from './logo.svg';
 import { Button } from 'reactstrap';
 import './App.css';
 import { ReactBingmaps } from 'react-bingmaps';
-import {FlatList} from 'react';
+import { FlatList } from 'react';
 
 class Event extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "Angera",
-      time: 0,
+      name: "Event",
+      time: "",
       coordinates: [0,0],
       isLoaded: false
-
     }
   }
 
@@ -27,13 +26,13 @@ class Event extends Component {
         <p className="align-left">
           Name: {this.props.name}
         </p>
-        <p className="align-right"> 
+        <p className="align-right">
           Time: {this.props.time}
         </p>
         <div className="clear-float">
         </div>
       </div>
-      
+
     );
   }
 }
@@ -56,43 +55,58 @@ class App extends Component {
     }
   }
 
-  // invoked immediately after component is mounted (inserted into the tree) 
+  // invoked immediately after component is mounted (inserted into the tree)
   componentDidMount() {
-    const coordinates = [];
-    const events = this.getEvents();
-    for (let i = 0; i < events.length; i++) {
-      const event = events[i];
-      coordinates.push({
-          "location":event.props.coordinates, 
-          "addHandler": "mouseover",
-          "infoboxOption": {title: event.props.name},
-          "pushPinOption":{ title: event.props.name, description: 'Pushpin' },
-          "infoboxAddHandler": {"type" : "click", callback: this.callBackMethod },
-          "pushPinAddHandler": {"type" : "click", callback: this.callBackMethod },
-          
-        });
-    }
 
-    this.setState( {
-      pushPins : coordinates
-    }, function() {this.setState({isLoaded: true});});
+    console.log("componentDidMount()");
+
+    window.readyForStuff = this.readyForStuff.bind(this);
+
+  }
+
+  readyForStuff() {
+
+    window.getEvents(events => {
+
+      console.log(events);
+
+      let eventElems = [];
+      const coordinates = [];
+
+      for (let i = 0; i < events.length; i++) {
+        const event = events[i];
+        coordinates.push({
+            "location": [29.718037, -95.402340],
+            "addHandler": "mouseover",
+            "infoboxOption": {title: event.title},
+            "pushPinOption":{ title: event.title, description: 'Pushpin' },
+            "infoboxAddHandler": {"type" : "click", callback: () => {} },
+            "pushPinAddHandler": {"type" : "click", callback: () => {} },
+          });
+        eventElems.push(<Event coordinates={[29.718037, -95.402340]} name = {event.title} time = "12:00" />)
+      }
+
+      this.setState( {
+        pushPins : coordinates,
+        eventElems: eventElems,
+      }, () => {this.setState({isLoaded: true});});
+
+    });
+
+  }
+
+  getCurrentEvents() {
+    return this.state.eventElems;
   }
 
   callBackMethod() {
     console.log("hey");
   }
 
-
-  // eventually replace with database call.
-  getEvents()  {
-    return [<Event coordinates={[29.718037, -95.402340]} key = {0} name = "HackRice" time = "12:00" />, 
-    <Event coordinates={[29.718191, -95.400085]} key={1} name = "RiceApps" time = "2:00" />];
-  }
-
   searchEvents() {
-    
+
   }
-  
+
   render() {
     if (!this.state.isLoaded) {
       return (
@@ -112,10 +126,9 @@ class App extends Component {
                       <Button color="success">My Events</Button>{' '}
                     </div>
                   </div>
-                  {this.getEvents()}
+                  {this.getCurrentEvents()}
                 </div>
                 <div className = "col-8 map" id = "map" >
-                
                 </div>
               </div>
             </div>
@@ -139,7 +152,7 @@ class App extends Component {
                       <Button color="success">My Events</Button>{' '}
                     </div>
                   </div>
-                  {this.getEvents()}
+                  {this.getCurrentEvents()}
                 </div>
                 <div className = "col-8 map" id = "map" >
                   <Map
@@ -162,14 +175,14 @@ class Map extends Component {
   }
 
   render() {
-    return(<ReactBingmaps 
+    return(<ReactBingmaps
       id = "one"
-      bingmapKey = {this.props.bingmapKey} 
+      bingmapKey = {this.props.bingmapKey}
       center = {[29.716830466, -95.40166506]}
       zoom = {16}
-      className = "customClass"
+      className = "bingMap"
       infoboxesWithPushPins = { this.props.pushPins }
-    > 
+    >
     </ReactBingmaps> );
   }
 
