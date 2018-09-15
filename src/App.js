@@ -48,14 +48,6 @@ class App extends Component {
       user: null,
       bingmapKey: "AlZR2yc0TK1RQDUNBOIxxYR0ShV4EZcsq10Y2TF3LNDHSnuHt4pw8rXAxBaZpeu2",
       pushPins: []
-      /*pushPins : [
-        {
-          "location":[29.718037, -95.402340], "option":{ color: 'purple' }, "addHandler": {"type" : "click", callback: this.callBackMethod }
-        },
-        {
-          "location":[29.718191, -95.400085], "option":{ color: 'green' }, "addHandler": {"type" : "click", callback: this.callBackMethod }
-        }
-      ]*/
     }
   }
 
@@ -79,15 +71,16 @@ class App extends Component {
 
       for (let i = 0; i < events.length; i++) {
         const event = events[i];
+        let desc = "where: "+ event.location+"<br>start: "+this.convertUnixTime(event.startTime)+"<br>end: "+this.convertUnixTime(event.endTime)
         coordinates.push({
-            "location": [29.718037, -95.402340],
+            "location": [event.latitude, event.longitude],
             "addHandler": "mouseover",
-            "infoboxOption": {title: event.title},
+            "infoboxOption": {title: event.title, description: desc},
             "pushPinOption":{ title: event.title, description: 'Pushpin' },
             "infoboxAddHandler": {"type" : "click", callback: () => {} },
             "pushPinAddHandler": {"type" : "click", callback: () => {} },
           });
-        eventElems.push(<Event coordinates={[29.718037, -95.402340]} name = {event.title} time = "12:00" />)
+        eventElems.push(<Event coordinates={[event.latitude, event.longitude]} name = {event.title} time = {this.convertUnixTime(event.startTime)} />)
       }
 
       this.setState( {
@@ -111,6 +104,7 @@ class App extends Component {
 
   }
 
+<<<<<<< HEAD
   onLogIn(user) {
     console.log(user);
 
@@ -128,6 +122,14 @@ class App extends Component {
 
   }
 
+||||||| merged common ancestors
+=======
+  convertUnixTime(time) {
+    let date = new Date(time)
+    return date.toLocaleTimeString()
+  }
+
+>>>>>>> 31bd615e28803b452e627ddb039d38f55799e2ca
   render() {
     if (!this.state.isLoaded) {
       return (
