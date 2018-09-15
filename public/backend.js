@@ -19,8 +19,11 @@ function createEvent(title, loc, startTime, endTime) {
       title: title,
       location: loc,
       startTime: startTime,
-      endTime: endTime
-    })
+      endTime: endTime,
+      interestedUsers: 0,
+      attendingUsers: 0,
+      creator: user.uid
+  })
 }
 
 function getEvents() {
@@ -42,6 +45,8 @@ function logIn() {
     db.ref(`users/${user.uid}`).update({
         name: user.displayName,
         email: user.email.toLowerCase(),
+        interestedEvents: {},
+        attendingEvents: {}
     })
 
    }).catch(function(error) {
@@ -51,3 +56,60 @@ function logIn() {
     var credential = error.credential
   })
 }
+
+function updateEventInterest(eventId, userId) {
+  let event = db.ref(`events/${eventId}`)
+  let userIntEvents = db.ref(`users/${userId}/interestedEvents`)
+  event.transaction(function(event) {
+    if (event) {
+      event.interestedUsers++
+    }
+    return event
+  })
+
+  let newEvent = {}
+  newEvent[eventId] = true
+  userIntEvents.update(newEvent)
+}
+
+function updateNotEventInterest(eventId, userId) {
+  let event = db.ref(`events/${eventId}`)
+  let userIntEvents = db.ref(`users/${userId}/interestedEvents`)
+  event.transaction(function(event) {
+    if (event) {
+      event.interestedUsers--
+    }
+    return event
+  })
+
+  db.ref(`users/${userId}/interestedEvents/${eventId}`).remove()
+}
+
+function updateEventAttending(eventId, userId) {
+  let event = db.ref(`events/${eventId}`)
+  let userIntEvents = db.ref(`users/${userId}/attendingEvents`)
+  event.transaction(function(event) {
+    if (event) {
+      event.attendingUsers++
+    }
+    return event
+  })
+
+  let newEvent = {}
+  newEvent[eventId] = true
+  userIntEvents.update(newEvent)
+}
+
+function updateNotEventAttending(eventId, userId) {
+  let event = db.ref(`events/${eventId}`)
+  let userIntEvents = db.ref(`users/${userId}/attendingEvents`)
+  event.transaction(function(event) {
+    if (event) {
+      event.attendingUsers--
+    }
+    return event
+  })
+
+  db.ref(`users/${userId}/attendingEvents/${eventId}`).remove()
+}
+
