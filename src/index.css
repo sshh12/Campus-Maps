@@ -8,3 +8,8 @@ body {
   max-height: 100%;
   overflow: scroll;
 }
+
+.navbar {
+  box-shadow: 0 3px 0 #bbb;
+  z-index: 9999999;
+}
