@@ -60,10 +60,10 @@
   border-bottom: 1px solid #ccc;
 }
 
-.event:hover {
+/*.event:hover {
   cursor: pointer;
   background: #eee;
-}
+} */
 
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }

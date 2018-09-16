@@ -4,6 +4,53 @@ import { Button } from 'reactstrap';
 import './App.css';
 import { ReactBingmaps } from 'react-bingmaps';
 import { FlatList } from 'react';
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+
+class Dropdown extends React.Component {
+  constructor(props) {
+    super(props);
+    this.toggle = this.toggle.bind(this);
+    this.state = {
+      dropdownOpen: false
+    };
+  }
+
+  toggle() {
+    this.setState({
+      dropdownOpen: !this.state.dropdownOpen
+    });
+  }
+
+  render() {
+    return (
+      <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+        <DropdownToggle caret color="primary">
+          Select
+        </DropdownToggle>
+        <DropdownMenu>
+          <DropdownItem onClick={() => this.markInterested()}>Interested</DropdownItem>
+          <DropdownItem onClick={() => this.markGoing()}>Going</DropdownItem>
+          <DropdownItem onClick={() => this.markNotGoing()}>Not Going</DropdownItem>
+        </DropdownMenu>
+      </ButtonDropdown>
+    );
+  }
+
+  markInterested() {
+    window.updateEventInterest(this.props.eventId, window.backend.user.uid);
+    window.getInterestedEvents(console.log);
+  }
+
+  markGoing() {
+    window.updateEventAttending(this.props.eventId, window.backend.user.uid);
+    window.getAttendingEvents(console.log);
+  }
+
+  markNotGoing() {
+    window.updateNotEventAttending(this.props.eventId, window.backend.user.uid);
+  }
+
+}
 
 class Event extends Component {
   constructor(props) {
@@ -18,9 +65,7 @@ class Event extends Component {
   }
 
   onClickEvent() {
-    console.log("Begin");
 
-    console.log("End");
     //window.createEvent("hhji", "hjhjhe", 67,667);
   }
 
@@ -34,11 +79,13 @@ class Event extends Component {
           When: {this.props.time}
         </p>
         <br/><br/>
-         <p className="align-right">
-          Where: {this.props.location}
-         </p>
         <div className="clear-float">
         </div>
+        {window.backend.user !== null && <Dropdown className="align-left" eventId = {this.props.id} />}
+        <p className = "align-right">Where: {this.props.location}
+         </p>
+         <div className="clear-float">
+         </div>
       </div>
 
     );
@@ -86,6 +133,7 @@ class App extends Component {
             "pushPinAddHandler": {"type" : "click", callback: () => {} },
           });
         eventElems.push(<Event coordinates={[event.latitude, event.longitude]}
+                                id = {event.key}
                                 name = {event.title}
                                 time = {this.convertUnixTime(event.startTime)}
                                 location = {event.location}
@@ -135,7 +183,14 @@ class App extends Component {
     }
 
     else {
-      window.getAttendingEvents((myEvents) => {
+      window.getAttendingEvents((myEventKeys) => {
+        const myEvents = [];
+        for(let i = 0; i < this.state.eventElems; i ++) {
+          const event = this.state.eventElems[i];
+          console.log(event);
+          if (myEventKeys.includes(event.childKey))
+            myEvents.push(event);
+        }
         this.setState({displayElems: myEvents});
       });
     }
