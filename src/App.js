@@ -6,12 +6,15 @@ import { ReactBingmaps } from 'react-bingmaps';
 import { FlatList } from 'react';
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
+const colors = {"Interested":"warning", "Going": "success", "Not Going": "danger", "Select": "primary"};
+
 class Dropdown extends React.Component {
   constructor(props) {
     super(props);
     this.toggle = this.toggle.bind(this);
     this.state = {
-      dropdownOpen: false
+      dropdownOpen: false,
+      status: props.status
     };
   }
 
@@ -22,10 +25,11 @@ class Dropdown extends React.Component {
   }
 
   render() {
+
     return (
       <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-        <DropdownToggle caret color="primary">
-          Select
+        <DropdownToggle caret color = {colors[this.state.status]}>
+          {this.state.status}
         </DropdownToggle>
         <DropdownMenu>
           <DropdownItem onClick={() => this.markInterested()}>Interested</DropdownItem>
@@ -38,16 +42,18 @@ class Dropdown extends React.Component {
 
   markInterested() {
     window.updateEventInterest(this.props.eventId, window.backend.user.uid);
-    window.getInterestedEvents(console.log);
+    this.setState({status: "Interested"});
+
   }
 
   markGoing() {
     window.updateEventAttending(this.props.eventId, window.backend.user.uid);
-    window.getAttendingEvents(console.log);
+    this.setState({status: "Going"});
   }
 
   markNotGoing() {
     window.updateNotEventAttending(this.props.eventId, window.backend.user.uid);
+    this.setState({status: "Not Going"});
   }
 
 }
@@ -73,22 +79,32 @@ class Event extends Component {
     return (
       <div className = "event" onClick={() => this.onClickEvent()}>
         <p className="align-left">
-          <b>{this.props.name}</b>
+        <b>{this.props.name}</b>
         </p>
         <p className="align-right">
-          When: {this.props.time}
+        When: {this.props.time}
         </p>
-        <br/><br/>
+        <br />
         <div className="clear-float">
         </div>
-        {window.backend.user !== null && <Dropdown className="align-left" eventId = {this.props.id} />}
-        <p className = "align-right">Where: {this.props.location}
-         </p>
-         <div className="clear-float">
-         </div>
+        <div class = "row">
+          <div class = "col-6">
+            {window.backend.user !== null && <Dropdown className="align-left" status = {this.props.status} eventId = {this.props.id} />}
+          </div>
+          <div class = "col-6">
+            <p className = "align-right">Where: {this.props.location}</p>
+          </div>
+        </div>
+        <div className="clear-float">
+        </div>
       </div>
 
     );
+  }
+
+  getEventUserStatus() {
+    const status = "Select";
+    return status;
   }
 }
 
@@ -100,6 +116,7 @@ class App extends Component {
       user: null,
       bingmapKey: "AlZR2yc0TK1RQDUNBOIxxYR0ShV4EZcsq10Y2TF3LNDHSnuHt4pw8rXAxBaZpeu2",
       pushPins: [],
+      userEvents: []
     }
   }
 
@@ -154,47 +171,129 @@ class App extends Component {
     console.log("hey");
   }
 
-  searchEvents() {
-
-  }
-
   onLogIn = (user) => {
-    this.setState({user: user})
-  }
+    this.setState({user: user}, () => {
+        this.usableGetAttendingEvents();
+        this.usableGetInterestedEvents();
+      //  this.markAllEvents()
+      }, () => { console.log("Successfully logged in")}
+    );
+
+    }
 
   // LEFT PANEL
-/*  getEvents() {
-    if (this.state.active === "All Events") {
-      return this.state.eventElems;
-    }
-    else {
-      return this.state.eventElems[0];
-    }
-  } */
 
-  onClickAllEvents() {
+  /*Called once the user logs in. */
+  markAllEvents = () => {
+    let attending =  this.state.userEvents;
+    let interested = this.state.interestedEvents;
+    let allEvents = this.state.eventElems;
+    let markedEvents = [];
+    for (let i = 0; i < allEvents.length; i ++) {
+      console.log("iterating through markAllEvents loop");
+      console.log(attending);
+      const event = allEvents[i];
+      if (attending.indexOf(event) > -1) {
+        markedEvents.push(<Event coordinates={[event.latitude, event.longitude]}
+          id = {event.key}
+          name = {event.title}
+          time = {this.convertUnixTime(event.startTime)}
+          location = {event.location}
+          status = "Going"
+          />);
+        }
+      else if (interested.indexOf(event) > -1) {
+        markedEvents.push(<Event coordinates={[event.latitude, event.longitude]}
+          id = {event.key}
+          name = {event.title}
+          time = {this.convertUnixTime(event.startTime)}
+          location = {event.location}
+          status = "Interested"
+          />);
+        }
+      else {
+        markedEvents.push(<Event coordinates={[event.latitude, event.longitude]}
+          id = {event.key}
+          name = {event.title}
+          time = {this.convertUnixTime(event.startTime)}
+          location = {event.location}
+          status = "Select"
+          />);
+      }
+    }
+    console.log("markedAllEvents");
+    console.log(markedEvents);
+    this.setState({eventElems : markedEvents, userEvents : attending, interestedEvents : interested});
+  }
+
+  onClickAllEvents = () => {
+    this.usableGetAttendingEvents();
+    this.usableGetInterestedEvents();
     this.setState({displayElems: this.state.eventElems});
   }
 
-  onClickMyEvents() {
+  onClickMyEvents = () => {
     if (window.backend.user == null)
     {
       window.logIn(this.onLogIn);
     }
 
     else {
-      window.getAttendingEvents((myEventKeys) => {
-        const myEvents = [];
-        for(let i = 0; i < this.state.eventElems; i ++) {
-          const event = this.state.eventElems[i];
-          console.log(event);
-          if (myEventKeys.includes(event.childKey))
-            myEvents.push(event);
+      window.getAttendingEvents(myEvents => {
+        let correctEvents = [];
+        for (let i = 0; i < myEvents.length; i ++) {
+          const event = myEvents[i];
+          if (event !== null ) {
+            correctEvents.push(<Event coordinates={[event.latitude, event.longitude]}
+                id = {event.key}
+                name = {event.title}
+                time = {this.convertUnixTime(event.startTime)}
+                location = {event.location}
+                status = "Going" />);
+            }
         }
-        this.setState({displayElems: myEvents});
+
+        this.setState({displayElems: correctEvents});
       });
     }
 
+  }
+
+  usableGetAttendingEvents = () => {
+
+    window.getAttendingEvents(myEvents => {
+      let correctEvents = [];
+      for (let i = 0; i < myEvents.length; i ++) {
+        const event = myEvents[i];
+        if (event !== null ) {
+          correctEvents.push(<Event coordinates={[event.latitude, event.longitude]}
+                id = {event.key}
+                name = {event.title}
+                time = {this.convertUnixTime(event.startTime)}
+                location = {event.location}
+                status = "Going" />);
+        }
+      }
+      this.setState({userEvents : correctEvents});
+    });
+  }
+
+  usableGetInterestedEvents = () => {
+    window.getInterestedEvents(myEvents => {
+      let correctEvents = [];
+      for (let i = 0; i < myEvents.length; i ++) {
+        const event = myEvents[i];
+        if (event !== null ) {
+          correctEvents.push(<Event coordinates={[event.latitude, event.longitude]}
+                  id = {event.key}
+                  name = {event.title}
+                  time = {this.convertUnixTime(event.startTime)}
+                  location = {event.location}
+                  status = "Interested" />);
+        }
+      }
+      this.setState({interestedEvents : correctEvents});
+    });
   }
 
   convertUnixTime(time) {
@@ -213,12 +312,12 @@ class App extends Component {
         <div className="App">
           <nav className="navbar navbar-default navbar-fixed-top">
            <div className="container">
-              <h3>Campus Maps</h3>
+              <h3 className="navbar-left">Campus Maps</h3>
                <Button className = "navbar-right" color="primary" onClick={() => (this.state.user == null) ? window.logIn(this.onLogIn) : null} >{(this.state.user == null) ? "Login" : window.backend.user.displayName}</Button>
             </div>
           </nav>
          <div className = "container-fluid">
-              <div className = "row">
+              <div className = "row one-page">
                 <div className = "col-4 panel scrollable" >
                   <div className="search-header">
                     <div className = "menu">
