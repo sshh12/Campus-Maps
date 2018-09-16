@@ -44,9 +44,7 @@ function logIn(callback) {
     backend.user = user
     backend.db.ref(`users/${user.uid}`).update({
         name: backend.user.displayName,
-        email: backend.user.email.toLowerCase(),
-        interestedEvents: {},
-        attendingEvents: {}
+        email: backend.user.email.toLowerCase()
     })
     callback(backend.user)
    }).catch(function(error) {
@@ -123,28 +121,30 @@ function getUserInfo(callback) {
   })
 }
 
-function getAttendingEvents(callback) {
+async function getAttendingEvents(callback) {
   let uid = backend.user.uid
   backend.db.ref(`users/${uid}/attendingEvents`)
-  .once('value', function(snapshot) {
+  .once('value', async function(snapshot) {
     let events = []
-    snapshot.forEach(function(childSnapshot) {
-      var childKey = childSnapshot.key;
-      events.push(childKey)
-    });
+    for (let snap in snapshot.val()) {
+      console.log(snap)
+      let event = await backend.db.ref(`events/${snap}`).once('value');
+      events.push(event.val())
+    }
     callback(events)
   });
 }
 
-function getInterestedEvents(callback) {
+async function getInterestedEvents(callback) {
   let uid = backend.user.uid
   backend.db.ref(`users/${uid}/interestedEvents`)
-  .once('value', function(snapshot) {
+  .once('value', async function(snapshot) {
     let events = []
-    snapshot.forEach(function(childSnapshot) {
-      var childKey = childSnapshot.key;
-      events.push(childKey)
-    });
+    for (let snap in snapshot.val()) {
+      console.log(snap)
+      let event = await backend.db.ref(`events/${snap}`).once('value');
+      events.push(event.val())
+    }
     callback(events)
   });
 }

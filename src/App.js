@@ -128,15 +128,27 @@ class App extends Component {
     this.setState({displayElems: this.state.eventElems});
   }
 
-  onClickMyEvents() {
+  onClickMyEvents () {
     if (window.backend.user == null)
     {
       window.logIn(this.onLogIn);
     }
 
     else {
-      window.getAttendingEvents((myEvents) => {
-        this.setState({displayElems: myEvents});
+      window.getAttendingEvents( (events) => {
+
+        let eventElems = [];
+  
+        for (let i = 0; i < events.length; i++) {
+          const event = events[i];
+          eventElems.push(<Event coordinates={[event.latitude, event.longitude]}
+                                  name = {event.title}
+                                  time = {this.convertUnixTime(event.startTime)}
+                                  location = {event.location}
+                                  />)
+        }
+
+        this.setState({displayElems: eventElems});
       });
     }
 
