@@ -174,7 +174,7 @@ class App extends Component {
           <nav className="navbar navbar-default navbar-fixed-top">
            <div className="container">
               <h3>Campus Maps</h3>
-               {(window.backend.user === null) && <Button className = "navbar-right" color="primary" onClick={() => window.logIn(console.log)} >Log In</Button>}
+               {(window.backend.user === null) && <Button className = "navbar-right" color="primary" onClick={() => window.logIn((user) => {this.onLogIn(user)} )} >Log In</Button>}
                {window.backend.user !== null && <p className = "navbar-right"> {window.backend.user.displayName}</p> }
             </div>
           </nav>
