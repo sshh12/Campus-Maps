@@ -12,6 +12,7 @@ class Event extends Component {
       name: "Event",
       time: "",
       coordinates: [0,0],
+      location: "",
       isLoaded: false
     }
   }
@@ -27,11 +28,15 @@ class Event extends Component {
     return (
       <div className = "event" onClick={() => this.onClickEvent()}>
         <p className="align-left">
-          Name: {this.props.name}
+          Event: {this.props.name}
         </p>
         <p className="align-right">
-          Time: {this.props.time}
+          When: {this.props.time}
         </p>
+        <br/><br/>
+         <p className="align-right">
+          Where: {this.props.location}
+         </p> 
         <div className="clear-float">
         </div>
       </div>
@@ -80,7 +85,11 @@ class App extends Component {
             "infoboxAddHandler": {"type" : "click", callback: () => {} },
             "pushPinAddHandler": {"type" : "click", callback: () => {} },
           });
-        eventElems.push(<Event coordinates={[event.latitude, event.longitude]} name = {event.title} time = {this.convertUnixTime(event.startTime)} />)
+        eventElems.push(<Event coordinates={[event.latitude, event.longitude]} 
+                                name = {event.title} 
+                                time = {this.convertUnixTime(event.startTime)} 
+                                location = {event.location}
+                                />)
       }
 
       this.setState( {
