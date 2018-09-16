@@ -158,7 +158,7 @@ class App extends Component {
         <div className="App">
           <nav className="navbar navbar-default navbar-fixed-top">
            <div className="container">
-              <h3>Campus Maps</h3>
+              <h3 className="navbar-left">Campus Maps</h3>
                <Button className = "navbar-right" color="primary" onClick={() => (this.state.user == null) ? window.logIn(this.onLogIn) : null} >{(this.state.user == null) ? "Login" : window.backend.user.displayName}</Button>
             </div>
           </nav>
