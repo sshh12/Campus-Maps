@@ -11,7 +11,7 @@
             ".read": true,
             "$eventID": {
                 ".write": "auth != null",
-                ".validate": "newData.hasChild('attendingUsers') || newData.hasChildren(['title', 'creator', 'location', 'startTime', 'endTime'])",
+                ".validate": "newData.hasChild('interestedUsers') || newData.hasChild('attendingUsers') || newData.hasChildren(['title', 'creator', 'location', 'startTime', 'endTime'])",
                 "title": {
                     ".write": "newData.child('creator').val() === auth.uid",
                     ".validate": "newData.isString() && newData.val().length > 1"
@@ -29,9 +29,9 @@
                     ".validate": "newData.isNumber()"
                 },
                 "attendingUsers": {
-                    ".write": true,
-                    ".validate": "!newData.exists() || (newData.val() === data.val() + 1 && !root.child('users').child(auth.uid).child('attendingEvents').child($eventID).exists()) || (newData.val() === data.val() - 1 && root.child('users').child(auth.uid).child('attendingEvents').child($eventID).exists())"
-				}
+                    ".write": true},
+                "interestedUsers": {
+                    ".write": true}
             }
         }
     }
