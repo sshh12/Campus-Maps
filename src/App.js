@@ -36,7 +36,7 @@ class Event extends Component {
         <br/><br/>
          <p className="align-right">
           Where: {this.props.location}
-         </p> 
+         </p>
         <div className="clear-float">
         </div>
       </div>
@@ -85,9 +85,9 @@ class App extends Component {
             "infoboxAddHandler": {"type" : "click", callback: () => {} },
             "pushPinAddHandler": {"type" : "click", callback: () => {} },
           });
-        eventElems.push(<Event coordinates={[event.latitude, event.longitude]} 
-                                name = {event.title} 
-                                time = {this.convertUnixTime(event.startTime)} 
+        eventElems.push(<Event coordinates={[event.latitude, event.longitude]}
+                                name = {event.title}
+                                time = {this.convertUnixTime(event.startTime)}
                                 location = {event.location}
                                 />)
       }
@@ -136,15 +136,11 @@ class App extends Component {
     }
 
     else {
-      const myEvents = [];
-
-      // delete "-1" later
-      for (let i = 0; i < this.state.eventElems.length-1; i++) {
-        const event = this.state.eventElems[i];
-        myEvents.push(event);
-      }
-
-      this.setState({displayElems: myEvents});
+      window.getAttendingEvents((myEvents) => {
+        console.log("My Events");
+        console.log(myEvents);
+        this.setState({displayElems: myEvents});
+      });
     }
 
   }
