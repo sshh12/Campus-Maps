@@ -4,6 +4,10 @@ Seize the world around you.
 
 [Link](https://campus-maps-4301c.firebaseapp.com/)
 
+## What 
+
+Our product is a map that encodes visual, spatial, temporal, and other descriptive data about events happening around in the local environment. It seeks to streamline the process of obtaining information for the general public, filling a void that is not satsified by current technology such as Facebook, Google Maps, and other services that provide data about the world around you. It is meant to be a gateway to experiencing a higher quality level of campus life.
+
 ## Problem Scope
 
 ### Problem
