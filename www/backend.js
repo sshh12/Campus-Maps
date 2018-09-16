@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
   window.backend = {}
+  backend.user = null
   backend.db = firebase.database()
   backend.eventList = backend.db.ref('events')
   backend.googleProvider = new firebase.auth.GoogleAuthProvider()
@@ -111,3 +112,40 @@ function updateNotEventAttending(eventId, userId) {
 
   backend.db.ref(`users/${userId}/attendingEvents/${eventId}`).remove()
 }
+
+function getUserInfo(callback) {
+  let uid = backend.user.uid
+  backend.db.ref(`users/${uid}`)
+  .once("value", function(snapshot) {
+    let email = snapshot.child('email').val()
+    let name = snapshot.child('name').val()
+    callback(email, name)
+  })
+}
+
+function getAttendingEvents(callback) {
+  let uid = backend.user.uid
+  backend.db.ref(`users/${uid}/attendingEvents`)
+  .once('value', function(snapshot) {
+    let events = []
+    snapshot.forEach(function(childSnapshot) {
+      var childKey = childSnapshot.key;
+      events.push(childKey)
+    });
+    callback(events)
+  });
+}
+
+function getInterestedEvents(callback) {
+  let uid = backend.user.uid
+  backend.db.ref(`users/${uid}/interestedEvents`)
+  .once('value', function(snapshot) {
+    let events = []
+    snapshot.forEach(function(childSnapshot) {
+      var childKey = childSnapshot.key;
+      events.push(childKey)
+    });
+    callback(events)
+  });
+}
+
