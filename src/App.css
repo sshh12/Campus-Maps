@@ -52,7 +52,6 @@
 
 .search-header {
   padding: 20px;
-  background: #ccc;
   margin: none;
 }
 
@@ -78,4 +77,9 @@
   color: #888;
   text-align: left;
 
+}
+
+.scrollable {
+  max-height: 100%;
+  overflow: scroll;
 }

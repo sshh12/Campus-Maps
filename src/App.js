@@ -25,7 +25,7 @@ class Event extends Component {
     return (
       <div className = "event" onClick={() => this.onClickEvent()}>
         <p className="align-left">
-          Event: {this.props.name}
+          <b>{this.props.name}</b>
         </p>
         <p className="align-right">
           When: {this.props.time}
@@ -118,27 +118,6 @@ class App extends Component {
     if (!this.state.isLoaded) {
       return (
         <div className="App">
-         <div className = "container-fluid">
-              <div className = "row">
-                <div className = "col-4 panel" >
-                  <div className="search-header">
-                    <div className = "block">
-                      <form>
-                        <input type="text" placeholder="Angera Search..."/>
-                        <Button color="primary" onClick={() => this.searchEvents()} >Search</Button>{' '}
-                      </form>
-                    </div>
-                    <div className = "menu">
-                      <Button color="primary">All Events</Button>{' '}
-                      <Button color="success">My Events</Button>{' '}
-                    </div>
-                  </div>
-                  {this.getCurrentEvents()}
-                </div>
-                <div className = "col-8 map" id = "map" >
-                </div>
-              </div>
-            </div>
         </div>
       );
     } else {
@@ -146,14 +125,8 @@ class App extends Component {
         <div className="App">
          <div className = "container-fluid">
               <div className = "row">
-                <div className = "col-4 panel" >
+                <div className = "col-4 panel scrollable" >
                   <div className="search-header">
-                    <div className = "block">
-                      <form>
-                        <input type="text" placeholder="Angera Search..."/>
-                        <Button color="primary" onClick={() => this.searchEvents()} >Search</Button>{' '}
-                      </form>
-                    </div>
                     <div className = "menu">
                       <Button color="primary">All Events</Button>{' '}
                       <Button color="success">My Events</Button>{' '}
