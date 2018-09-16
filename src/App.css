@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  height: 100vh;
+  width: 100vw;
 }
 
 .App-logo {
@@ -26,6 +28,10 @@
   padding-top: 10px;
 }
 
+.row {
+  height: 100vh;
+}
+
 .align-left {
   float: left;
 }
@@ -46,16 +52,7 @@
 
 .search-header {
   padding: 20px;
-  background: #ccc;
   margin: none;
-}
-
-.panel {
-  max-height: 100%;
-}
-
-.event-results {
-  overflow-y: auto;
 }
 
 .event {
@@ -80,4 +77,9 @@
   color: #888;
   text-align: left;
 
+}
+
+.scrollable {
+  max-height: 100%;
+  overflow-y: scroll;
 }

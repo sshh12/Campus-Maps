@@ -28,7 +28,7 @@ class Event extends Component {
     return (
       <div className = "event" onClick={() => this.onClickEvent()}>
         <p className="align-left">
-          Event: {this.props.name}
+          <b>{this.props.name}</b>
         </p>
         <p className="align-right">
           When: {this.props.time}
@@ -110,9 +110,8 @@ class App extends Component {
 
   }
 
-  onLogIn(user) {
-    console.log(user);
-    this.setState({user: user}, () => {this.setState({isLoaded: true})});
+  onLogIn = (user) => {
+    this.setState({user: user})
   }
 
   // LEFT PANEL
@@ -137,8 +136,6 @@ class App extends Component {
 
     else {
       window.getAttendingEvents((myEvents) => {
-        console.log("My Events");
-        console.log(myEvents);
         this.setState({displayElems: myEvents});
       });
     }
@@ -154,23 +151,6 @@ class App extends Component {
     if (!this.state.isLoaded) {
       return (
         <div className="App">
-         <div className = "container-fluid">
-              <div className = "row">
-                <div className = "col-4 panel" >
-                  <div className="search-header">
-                    <div className = "block">
-                    </div>
-                    <div className = "menu">
-                      <Button color="primary" onClick = {() => this.onClickAllEvents()}>All Events</Button>{' '}
-                      <Button color="success" onClick = {() => this.onClickMyEvents()}>My Events</Button>
-                    </div>
-                  </div>
-                  {this.state.eventElems}
-                </div>
-                <div className = "col-8 map" id = "map" >
-                </div>
-              </div>
-            </div>
         </div>
       );
     } else {
@@ -179,16 +159,13 @@ class App extends Component {
           <nav className="navbar navbar-default navbar-fixed-top">
            <div className="container">
               <h3>Campus Maps</h3>
-               {(window.backend.user === null) && <Button className = "navbar-right" color="primary" onClick={() => window.logIn((user) => {this.onLogIn(user)} )} >Log In</Button>}
-               {window.backend.user !== null && <p className = "navbar-right"> {window.backend.user.displayName}</p> }
+               <Button className = "navbar-right" color="primary" onClick={() => window.logIn(this.onLogIn)} >{(this.state.user == null) ? "Login" : window.backend.user.displayName}</Button>
             </div>
           </nav>
          <div className = "container-fluid">
               <div className = "row">
-                <div className = "col-4 panel" >
+                <div className = "col-4 panel scrollable" >
                   <div className="search-header">
-                    <div className = "block">
-                    </div>
                     <div className = "menu">
                       <Button color="primary" onClick = {() => this.onClickAllEvents()}>All Events</Button>{' '}
                       <Button color="success" onClick = {() => this.onClickMyEvents()}>My Events</Button>
