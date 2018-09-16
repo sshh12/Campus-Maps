@@ -50,6 +50,14 @@
   margin: none;
 }
 
+.panel {
+  max-height: 100%;
+}
+
+.event-results {
+  overflow-y: auto;
+}
+
 .event {
   padding: 20px;
   border-bottom: 1px solid #ccc;

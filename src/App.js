@@ -47,7 +47,7 @@ class App extends Component {
     this.state = {
       user: null,
       bingmapKey: "AlZR2yc0TK1RQDUNBOIxxYR0ShV4EZcsq10Y2TF3LNDHSnuHt4pw8rXAxBaZpeu2",
-      pushPins: []
+      pushPins: [],
     }
   }
 
@@ -86,14 +86,11 @@ class App extends Component {
       this.setState( {
         pushPins : coordinates,
         eventElems: eventElems,
+        displayElems: eventElems,
       }, () => {this.setState({isLoaded: true});});
 
     });
 
-  }
-
-  getCurrentEvents() {
-    return this.state.eventElems;
   }
 
   callBackMethod() {
@@ -104,32 +101,50 @@ class App extends Component {
 
   }
 
-<<<<<<< HEAD
   onLogIn(user) {
     console.log(user);
+    this.setState({user: user}, () => {this.setState({isLoaded: true})});
+  }
 
+  // LEFT PANEL
+/*  getEvents() {
+    if (this.state.active === "All Events") {
+      return this.state.eventElems;
+    }
+    else {
+      return this.state.eventElems[0];
+    }
+  } */
+
+  onClickAllEvents() {
+    this.setState({displayElems: this.state.eventElems});
   }
 
   onClickMyEvents() {
     if (window.backend.user == null)
     {
-      window.logIn(console.log);
+      window.logIn(this.onLogIn);
     }
 
     else {
+      const myEvents = [];
 
+      // delete "-1" later
+      for (let i = 0; i < this.state.eventElems.length-1; i++) {
+        const event = this.state.eventElems[i];
+        myEvents.push(event);
+      }
+
+      this.setState({displayElems: myEvents});
     }
 
   }
 
-||||||| merged common ancestors
-=======
   convertUnixTime(time) {
     let date = new Date(time)
     return date.toLocaleTimeString()
   }
 
->>>>>>> 31bd615e28803b452e627ddb039d38f55799e2ca
   render() {
     if (!this.state.isLoaded) {
       return (
@@ -141,11 +156,11 @@ class App extends Component {
                     <div className = "block">
                     </div>
                     <div className = "menu">
-                      <Button color="primary">All Events</Button>{' '}
-                      <Button color="success" onClick = {() => this.onClickMyEvents()}>My Events</Button>{' '}
+                      <Button color="primary" onClick = {() => this.onClickAllEvents()}>All Events</Button>{' '}
+                      <Button color="success" onClick = {() => this.onClickMyEvents()}>My Events</Button>
                     </div>
                   </div>
-                  {this.getCurrentEvents()}
+                  {this.state.eventElems}
                 </div>
                 <div className = "col-8 map" id = "map" >
                 </div>
@@ -159,8 +174,8 @@ class App extends Component {
           <nav className="navbar navbar-default navbar-fixed-top">
            <div className="container">
               <h3>Campus Maps</h3>
-               {!(window.backend.user === null) && <Button className = "navbar-right" color="primary" onClick={() => window.logIn(console.log)} >Log In</Button>}
-               {window.backend.user !== null && <h4 className = "navbar-right"> {window.backend.user.email}</h4> }
+               {(window.backend.user === null) && <Button className = "navbar-right" color="primary" onClick={() => window.logIn(console.log)} >Log In</Button>}
+               {window.backend.user !== null && <p className = "navbar-right"> {window.backend.user.displayName}</p> }
             </div>
           </nav>
          <div className = "container-fluid">
@@ -170,11 +185,13 @@ class App extends Component {
                     <div className = "block">
                     </div>
                     <div className = "menu">
-                      <Button color="primary">All Events</Button>{' '}
+                      <Button color="primary" onClick = {() => this.onClickAllEvents()}>All Events</Button>{' '}
                       <Button color="success" onClick = {() => this.onClickMyEvents()}>My Events</Button>
                     </div>
                   </div>
-                  {this.getCurrentEvents()}
+                  <div className = "event-results">
+                    {this.state.displayElems}
+                  </div>
                 </div>
                 <div className = "col-8 map" id = "map" >
                   <Map
@@ -210,5 +227,6 @@ class Map extends Component {
 
 
 }
+
 
 export default App;
