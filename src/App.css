@@ -1,0 +1,89 @@
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.panel * div {
+  padding-top: 10px;
+}
+
+.one-page{
+  height: 100vh;
+}
+
+.align-left {
+  float: left;
+}
+
+.align-right {
+  float: right;
+}
+
+.clear-float {
+  clear: both;
+}
+
+.block {
+  display: block;
+}
+
+/** LEFT PANEL **/
+
+.search-header {
+  padding: 20px;
+  margin: none;
+}
+
+.event {
+  padding: 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+/*.event:hover {
+  cursor: pointer;
+  background: #eee;
+} */
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.MicrosoftMap .Infobox .infobox-info {
+
+  font-family: verdana;
+  font-size: 10pt;
+  color: #888;
+  text-align: left;
+
+}
+
+.scrollable {
+  max-height: 100%;
+  overflow-y: scroll;
+}
+
+.navbar {
+    box-shadow: 0 3px 0 #bbb;
+    z-index: 9999999;
+}

@@ -24,5 +24,6 @@ Often times we get so cornered in our own bubbles that we miss what is happening
 
 This can be a sinister outcome from obliviousness- a feeling of disconnect from campus life. You feel like more of an individual living in your own bubble on campus instead of part of a greater whole. College is supposed to be about connecting to something greater than yourself-- and while this may sound very abstract and way beyond our simple map app, the goal of our map app is to bridge the gap between people and opportunities. Bridging this gap opens the door to these connections.
 
-### Stakeholders
+### Stakeholders: Organizations
 
+Organizations will benefit from this product by increasing their exposure and turnout. For new organizations, gaining exposure is crucial for success. Then, our service, which allows whatever events the organization creates to be viewable to anyone and anytime, is conducive to gaining exposure. Older organizations may benefit from our service as well by optimizing turnout to their events for the very same reasons: people, who would otherwise miss these opportunities because of their own obliviousness, can now be put in the way of discovering these previously hidden opportunities. 
