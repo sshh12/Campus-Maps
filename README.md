@@ -4,6 +4,20 @@ Seize the world around you.
 
 [Link](https://campus-maps-4301c.firebaseapp.com/)
 
+![screenshot](https://user-images.githubusercontent.com/6625384/45606639-5e580200-ba0c-11e8-82a5-48ce68d4bc53.png)
+
+## Team
+
+#### Frontend
+
+* [Angela Hwang](https://github.com/hwangange)
+* [Andrew Feng](https://github.com/asfeng6)
+
+#### Backend
+
+* [Noushin Quazi](https://github.com/noushinquazi)
+* [Shrivu Shankar](https://github.com/sshh12)
+
 ## What 
 
 Our product is a map that encodes visual, spatial, temporal, and other descriptive data about events happening around in the local environment. It seeks to streamline the process of obtaining information for the general public, filling a void that is not satsified by current technology such as Facebook, Google Maps, and other services that provide data about the world around you. It is meant to be a gateway to experiencing a higher quality level of campus life.
